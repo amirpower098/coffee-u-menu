@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>COFFEE U | Café Menu</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Vazirmatn:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(24, 14, 9, 0.88), rgba(18, 10, 7, 0.95)),
+        repeating-linear-gradient(
+            90deg,
+            #24150d 0px,
+            #2d1b11 3px,
+            #1d1009 8px,
+            #301c11 13px
+        );
+    color: #ead8b0;
+    font-family: "Vazirmatn", sans-serif;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 50% 20%, rgba(198, 153, 72, 0.13), transparent 35%),
+        radial-gradient(circle at 10% 90%, rgba(255, 190, 80, 0.06), transparent 30%);
+}
+
+.container {
+    width: min(920px, 92%);
+    margin: auto;
+    padding: 45px 0 60px;
+}
+
+/* HEADER */
+
+header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.symbol {
+    color: #c8a15a;
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+h1 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(48px, 11vw, 86px);
+    letter-spacing: 7px;
+    color: #ead6a6;
+    line-height: 0.9;
+}
+
+h1 span {
+    color: #bd9145;
+}
+
+.tagline {
+    margin-top: 18px;
+    color: #a9926e;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 17px;
+    letter-spacing: 2px;
+}
+
+.divider {
+    margin: 24px auto 0;
+    width: min(360px, 80%);
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        #9f793e,
+        transparent
+    );
+    position: relative;
+}
+
+.divider span {
+    position: absolute;
+    background: #21130c;
+    padding: 0 14px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #c6a05b;
+}
+
+/* CATEGORY BUTTONS */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 35px;
+}
+
+.category {
+    width: 100%;
+    min-height: 150px;
+    border: 1px solid rgba(190, 150, 78, 0.35);
+    border-radius: 6px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(63, 38, 23, 0.95),
+            rgba(31, 18, 11, 0.98)
+        );
+    color: #e7d3a5;
+    cursor: pointer;
+    padding: 25px 15px;
+    font-family: "Vazirmatn", sans-serif;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.category::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        transparent,
+        rgba(207, 166, 91, 0.08),
+        transparent
+    );
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+.category:active {
+    transform: scale(0.97);
+}
+
+.category.active {
+    border-color: #c6a05b;
+    box-shadow:
+        0 0 0 1px rgba(198, 160, 91, 0.2),
+        0 12px 35px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+}
+
+.category.active::before {
+    transform: translateX(100%);
+}
+
+.icon {
+    font-size: 34px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.category-title {
+    display: block;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.category-subtitle {
+    display: block;
+    margin-top: 6px;
+    font-family: "Cormorant Garamond", serif;
+    color: #9e8868;
+    font-size: 16px;
+}
+
+.arrow {
+    display: block;
+    margin-top: 12px;
+    color: #b99452;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.category.active .arrow {
+    transform: rotate(180deg);
+}
+
+/* MENU */
+
+.menu-section {
+    display: none;
+    margin-top: 25px;
+    border: 1px solid rgba(190, 150, 78, 0.3);
+    border-radius: 6px;
+    background: rgba(27, 15, 9, 0.96);
+    padding: 25px 20px;
+}
+
+.menu-section.show {
+    display: block;
+    animation: menuOpen 0.4s ease;
+}
+
+@keyframes menuOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-title {
+    text-align: center;
+    color: #d5b56e;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.menu-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 4px;
+    border-bottom: 1px solid rgba(190, 150, 78, 0.13);
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    color: #eadcc0;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.item-dots {
+    flex: 1;
+    border-bottom: 1px dotted rgba(190, 150, 78, 0.35);
+    margin-top: 8px;
+}
+
+.item-price {
+    white-space: nowrap;
+    color: #caa45d;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    margin-top: 45px;
+    color: #78664d;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 15px;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 92%;
+        padding-top: 30px;
+    }
+
+    .categories {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .category {
+        min-height: 125px;
+        padding: 20px;
+    }
+
+    .icon {
+        font-size: 30px;
+    }
+
+    .category-title {
+        font-size: 16px;
+    }
+
+    .menu-section {
+        padding: 20px 15px;
+    }
+
+    .menu-title {
+        font-size: 27px;
+    }
+
+    .menu-item {
+        padding: 14px 2px;
+    }
+
+    .item-name {
+        font-size: 14px;
+    }
+
+    .item-price {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="symbol">✦</div>
+
+        <h1>
+            COFFEE <span>U</span>
+        </h1>
+
+        <div class="tagline">
+            .A quiet corner for coffee, books & good moments
+        </div>
+
+        <div class="divider">
+            <span>❦</span>
+        </div>
+    </header>
+
+
+    <!-- CATEGORY BUTTONS -->
+
+    <section class="categories">
+
+        <button class="category" type="button" data-menu="hot">
+            <span class="icon">☕</span>
+            <span class="category-title">نوشیدنی‌های گرم</span>
+            <span class="category-subtitle">Hot Drinks</span>
+            <span class="arrow">⌄</span>
+        </button>
+
+        <button class="category" type="button" data-menu="cold">
+            <span class="icon">🥤</span>
+            <span class="category-title">نوشیدنی‌های سرد</span>
+            <span class="category-subtitle">Cold Drinks</span>
+            <span class="arrow">⌄</span>
+        </button>
+
+        <button class="category" type="button" data-menu="food">
+            <span class="icon">🍳</span>
+            <span class="category-title">غذا و صبحانه</span>
+            <span class="category-subtitle">Food & Breakfast</span>
+            <span class="arrow">⌄</span>
+        </button>
+
+        <button class="category" type="button" data-menu="sweet">
+            <span class="icon">🍰</span>
+            <span class="category-title">شیرینی و کیک</span>
+            <span class="category-subtitle">Sweets & Cake</span>
+            <span class="arrow">⌄</span>
+        </button>
+
+    </section>
+
+
+    <!-- HOT DRINKS -->
+
+    <section class="menu-section" id="hot">
+
+        <div class="menu-title">
+            نوشیدنی‌های گرم
+        </div>
+
+        <div class="menu-list">
+
+            <div class="menu-item">
+                <span class="item-name">قهوه تک</span>
+                <span class="item-dots"></span>
+                <span class="item-price">70 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">قهوه دوبل</span>
+                <span class="item-dots"></span>
+                <span class="item-price">90 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">هات چاکلت</span>
+                <span class="item-dots"></span>
+                <span class="item-price">170 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">کاپوچینو</span>
+                <span class="item-dots"></span>
+                <span class="item-price">170 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">شیرکاکائو</span>
+                <span class="item-dots"></span>
+                <span class="item-price">130 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">لاته تک</span>
+                <span class="item-dots"></span>
+                <span class="item-price">140 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">لاته دوبل</span>
+                <span class="item-dots"></span>
+                <span class="item-price">170 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">چایی</span>
+                <span class="item-dots"></span>
+                <span class="item-price">60 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">چایی طعم‌دار و نبات</span>
+                <span class="item-dots"></span>
+                <span class="item-price">90 تومان</span>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- COLD DRINKS -->
+
+    <section class="menu-section" id="cold">
+
+        <div class="menu-title">
+            نوشیدنی‌های سرد
+        </div>
+
+        <div class="menu-list">
+
+            <div class="menu-item">
+                <span class="item-name">شیک شکلات</span>
+                <span class="item-dots"></span>
+                <span class="item-price">190 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">شیک وانیل</span>
+                <span class="item-dots"></span>
+                <span class="item-price">190 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">آیس کارامل ماکیاتو</span>
+                <span class="item-dots"></span>
+                <span class="item-price">190 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">آیس لاته</span>
+                <span class="item-dots"></span>
+                <span class="item-price">160 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">آیس آمریکانو</span>
+                <span class="item-dots"></span>
+                <span class="item-price">120 تومان</span>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- FOOD -->
+
+    <section class="menu-section" id="food">
+
+        <div class="menu-title">
+            غذا و صبحانه
+        </div>
+
+        <div class="menu-list">
+
+            <div class="menu-item">
+                <span class="item-name">ذرت مکزیکی بزرگ</span>
+                <span class="item-dots"></span>
+                <span class="item-price">198 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">ذرت مکزیکی کوچک</span>
+                <span class="item-dots"></span>
+                <span class="item-price">148 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">کمپیر</span>
+                <span class="item-dots"></span>
+                <span class="item-price">265 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">نیمرو</span>
+                <span class="item-dots"></span>
+                <span class="item-price">89 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">سوسیس تخم‌مرغ</span>
+                <span class="item-dots"></span>
+                <span class="item-price">110 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">املت</span>
+                <span class="item-dots"></span>
+                <span class="item-price">140 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">پاستا آلفردو</span>
+                <span class="item-dots"></span>
+                <span class="item-price">300 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">پاستا آلفردو اقتصادی</span>
+                <span class="item-dots"></span>
+                <span class="item-price">250 تومان</span>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- SWEETS -->
+
+    <section class="menu-section" id="sweet">
+
+        <div class="menu-title">
+            شیرینی و کیک
+        </div>
+
+        <div class="menu-list">
+
+            <div class="menu-item">
+                <span class="item-name">شیرینی خانگی و کیک روز</span>
+                <span class="item-dots"></span>
+                <span class="item-price">160 تومان</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="item-name">کوکی</span>
+                <span class="item-dots"></span>
+                <span class="item-price">70 تومان</span>
+            </div>
+
+        </div>
+    </section>
+
+
+    <footer>
+        COFFEE U · Ashrafi University
+    </footer>
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const buttons = document.querySelectorAll(".category");
+    const menus = document.querySelectorAll(".menu-section");
+
+    buttons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const menuId = button.getAttribute("data-menu");
+            const selectedMenu = document.getElementById(menuId);
+
+            if (!selectedMenu) {
+                return;
+            }
+
+            const alreadyOpen = selectedMenu.classList.contains("show");
+
+            /* بستن همه */
+            buttons.forEach(function (item) {
+                item.classList.remove("active");
+            });
+
+            menus.forEach(function (menu) {
+                menu.classList.remove("show");
+            });
+
+            /* اگر قبلاً باز نبوده، بازش کن */
+            if (!alreadyOpen) {
+
+                button.classList.add("active");
+                selectedMenu.classList.add("show");
+
+                setTimeout(function () {
+
+                    selectedMenu.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }, 100);
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
